@@ -12,7 +12,16 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
-
+    /**
+     * Initialize method
+     * Allows the loging action and removes the index action authorization given in AppController
+     * @return \Cake\Http\Response|void
+     */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
     /**
      * Index method
      *
@@ -103,5 +112,41 @@ class UsersController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * Login method
+     *
+     * @param string|null $id User id.
+     * @return \Cake\Http\Response|null Redirects to index.
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function login()
+    {
+        $result = $this->Authentication->getResult();
+
+        // regardless of POST or GET, redirect if user is logged in
+        if ($result->isValid()) {
+            $redirect = $this->request->getQuery('redirect', ['controller' => 'Pages', 'action' => 'display', 'home']);
+            return $this->redirect($redirect);
+        }
+
+        // display error if user submitted and authentication failed
+        if ($this->request->is(['post']) && !$result->isValid()) {
+            $this->Flash->error('Invalid username or password');
+        }
+    }
+    /**
+     * Logout method
+     *
+     * @param null
+     * @return \Cake\Http\Response|null Redirects to login.
+     * @throws
+     */
+    public function logout()
+    {
+        $this->Flash->success('You are now logged out.');
+        return $this->redirect($this->Authentication->logout());
+
     }
 }
