@@ -13,6 +13,7 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
+$this->loadHelper('Authentication.Identity');
 $cakeDescription = 'CakePHP: the rapid development php framework';
 ?>
 <!DOCTYPE html>
@@ -42,8 +43,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         </ul>
         <div class="top-bar-section">
             <ul class="right">
-                <li><a target="_blank" href="https://book.cakephp.org/3.0/">Documentation</a></li>
-                <li><a target="_blank" href="https://api.cakephp.org/3.0/">API</a></li>
+                <li>
+                <?php
+                if ($this->Identity->isLoggedIn()) {
+                    $username = $this->Identity->get('username');
+                    echo $this->Html->link($username, array('controller' => 'users', 'action' => 'logout'));
+
+                } else {
+                    // the user is not logged in
+                    echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
+                }
+                ?>
+                </li>
             </ul>
         </div>
     </nav>
