@@ -95,11 +95,16 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             // pass null as cacheConfig, example: `new RoutingMiddleware($this)`
             // you might want to disable this cache in case your routing is extremely simple
             ->add(new RoutingMiddleware($this, '_cake_routes_'))
-
-            // Add csrf middleware.
-            ->add(new CsrfProtectionMiddleware([
-                'httpOnly' => true
-            ]))
+            ->add(
+                function (ServerRequestInterface $request, ResponseInterface $response, callable $next)
+                {
+                    $params = $request->getAttribute('params');
+                    if ($params['_matchedRoute'] !== '/api/:controller') {
+                        $csrf = new CsrfProtectionMiddleware(['httpOnly' => true]);
+                        return $csrf($request, $response, $next);
+                    }
+                    return $next($request, $response);
+                })
             ->add($authentication);
 
         return $middlewareQueue;
