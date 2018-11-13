@@ -27,6 +27,10 @@ use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Authorization\AuthorizationService;
+use Authorization\AuthorizationServiceProviderInterface;
+use Authorization\Middleware\AuthorizationMiddleware;
+use Authorization\Policy\OrmResolver;
 
 /**
  * Application setup class.
@@ -34,7 +38,7 @@ use Psr\Http\Message\ServerRequestInterface;
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
  */
-class Application extends BaseApplication implements AuthenticationServiceProviderInterface
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface, AuthorizationServiceProviderInterface
 {
     /**
      * {@inheritDoc}
@@ -57,6 +61,10 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
          * Adds the Authentication Plugin
          */
         $this->addPlugin('Authentication');
+        /*
+         * Adds the Authorization Plugin
+         */
+        $this->addPlugin('Authorization');
         /*
          * Only try to load DebugKit in development mode
          * Debug Kit should not be installed on a production system
@@ -106,6 +114,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     return $next($request, $response);
                 })
             ->add($authentication);
+        $middlewareQueue->add(new AuthorizationMiddleware($this));
 
         return $middlewareQueue;
     }
@@ -137,5 +146,11 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         ]);
 
         return $service;
+    }
+
+    public function getAuthorizationService(ServerRequestInterface $request, ResponseInterface $response){
+        $resolver = new OrmResolver();
+
+        return new AuthorizationService($resolver);
     }
 }
