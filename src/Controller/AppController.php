@@ -66,7 +66,7 @@ class AppController extends Controller
         /*
          * Loads and configures Authorization Component
          */
-        $this->loadComponent('Authorization.Authorization');
+        $this->loadComponent('Authorization.Authorization', ['skipAuthorization' => ['login',]]);
     }
     /**
      * Before render callback.
