@@ -2,7 +2,8 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
-
+use Authentication\IdentityInterface as AuthenticationIdentityInterface;
+use Authorization\IdentityInterface as AuthorizationIdentityInterface;
 /**
  * User Entity
  *
@@ -15,8 +16,23 @@ use Cake\ORM\Entity;
  *
  * @property \App\Model\Entity\Book[] $books
  */
-class User extends Entity
+class User extends Entity implements AuthenticationIdentityInterface, AuthorizationIdentityInterface
 {
+    /**
+     * Authentication\IdentityInterface method
+     */
+    public function getIdentifier()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Authentication\IdentityInterface method
+     */
+    public function getOriginalData()
+    {
+        return $this;
+    }
 
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -44,4 +60,37 @@ class User extends Entity
     protected $_hidden = [
         'password'
     ];
+
+    /**
+     * Check whether the current identity can perform an action.
+     *
+     * @param string $action The action/operation being performed.
+     * @param mixed $resource The resource being operated on.
+     * @return bool
+     */
+    public function can($action, $resource)
+    {
+        return $this->authorization->can($this, $action, $resource);
+    }
+
+    /**
+     * Apply authorization scope conditions/restrictions.
+     *
+     * @param string $action The action/operation being performed.
+     * @param mixed $resource The resource being operated on.
+     * @return mixed The modified resource.
+     */
+    public function applyScope($action, $resource)
+    {
+        return $this->authorization->applyScope($this, $action, $resource);
+    }
+    /**
+     * Setter to be used by the middleware.
+     */
+    public function setAuthorization($service)
+    {
+        $this->authorization = $service;
+
+        return $this;
+    }
 }
