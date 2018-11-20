@@ -1,51 +1,44 @@
-# CakePHP Application Skeleton
+# Tests Cakephp Authentication and Authorization plugin
 
-[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
+Steps performed:
 
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 3.x.
+1: Initial installation of cake
 
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
+2: Install Authorization Plugin
 
-## Installation
+3: Install Authentication Plugin
 
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
+4: Configure Database and base objects
 
-If Composer is installed globally, run
+5: Loads basic Authentication plugin
 
-```bash
-composer create-project --prefer-dist cakephp/app
-```
+6: Creates resources for Login Form
 
-In case you want to use a custom app dir name (e.g. `/myapp/`):
+7: Enables REST for the /api Scope
 
-```bash
-composer create-project --prefer-dist cakephp/app myapp
-```
+8: Loads basic Authorization plugin
 
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
+9: Create basic User Policy
 
-```bash
-bin/cake server -p 8765
-```
+10: Allows Debug toolkit through the Authorization
 
-Then visit `http://localhost:8765` to see the welcome page.
+11: Create basic Book and BooksTable Policies
 
-## Update
+12: Implements Authorization for UsersController::login()
 
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
+13: Configure the Authorization\IdentityInterface and Authentication\IdentityInterface interface for User Entity
 
-## Configuration
+14: Allows Debug toolkit through the Authorization
 
-Read and edit `config/app.php` and setup the `'Datasources'` and any other
-configuration relevant for your application.
+15: Implements Authorization for BooksController (Testing skipAuthorization)
 
-## Layout
+16: Configures scopeIndex for BooksTablePolicy
 
-The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5) CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+Steps to be performed:
+
+Test Authorization to resourceless action Using Controller as Resource
+
+Test Authorization to resourceless action Using Requests as Resource
+
+Test Authorization to resourceless action Using StringResolver
+
