@@ -114,7 +114,20 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                     return $next($request, $response);
                 })
             ->add($authentication);
-        $middlewareQueue->add(new AuthorizationMiddleware($this));
+        $middlewareQueue->add(new AuthorizationMiddleware($this, [
+            'unauthorizedHandler' => [
+                'className' => 'Redirect',
+                'url' => '/users/login',
+                'queryParam' => 'redirectUrl',
+                'exceptions' => [
+                    MissingIdentityException::class,
+                    OtherException::class,
+                ],
+            ],
+            'identityDecorator' => function ($auth, $user) {
+                return $user->setAuthorization($auth);
+            }
+        ]));
 
         return $middlewareQueue;
     }
