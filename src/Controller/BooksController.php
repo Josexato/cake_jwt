@@ -20,12 +20,11 @@ class BooksController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users']
-        ];
-        $books = $this->paginate($this->Books);
 
-        $this->set(compact('books'));
+        $user = $this->request->getAttribute('identity');
+        $this->Authorization->skipAuthorization();
+        $query = $user->applyScope('index', $this->Books->find()->contain('Users'));
+        $this->set('books', $this->paginate($query));
     }
 
     /**
