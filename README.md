@@ -34,11 +34,16 @@ Steps performed:
 
 16: Configures scopeIndex for BooksTablePolicy
 
-Steps to be performed:
+# Steps to be performed:
 
 Test Authorization to resourceless action Using Controller as Resource
 
 Test Authorization to resourceless action Using Requests as Resource
+https://github.com/cakephp/authorization/blob/18a821301c91b9fa419046958015276af8fabdfa/tests/test_app/TestApp/Policy/RequestPolicy.php
 
 Test Authorization to resourceless action Using StringResolver
+https://github.com/cakephp/authorization/blob/18a821301c91b9fa419046958015276af8fabdfa/tests/test_app/TestApp/Policy/StringResolver.php
+
+Test JWT authorization using preflight request and Angular
+https://www.munderwood.ca/index.php/2017/02/28/responding-to-http-options-requests-in-cakephp/
 
