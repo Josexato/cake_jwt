@@ -29,6 +29,7 @@ class UsersController extends AppController
      */
     public function index()
     {
+        $this->Authorization->skipAuthorization();
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
@@ -145,8 +146,8 @@ class UsersController extends AppController
      */
     public function logout()
     {
+        $this->Authorization->skipAuthorization();
         $this->Flash->success('You are now logged out.');
         return $this->redirect($this->Authentication->logout());
-
     }
 }
