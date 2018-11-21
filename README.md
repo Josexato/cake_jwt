@@ -20,7 +20,7 @@ Steps performed:
 
 9: Create basic User Policy
 
-10: Allows Debug toolkit through the Authorization
+10: Allow Debug toolkit through the Authorization using a custom RequestHandler
 
 11: Create basic Book and BooksTable Policies
 
@@ -28,11 +28,9 @@ Steps performed:
 
 13: Configure the Authorization\IdentityInterface and Authentication\IdentityInterface interface for User Entity
 
-14: Allows Debug toolkit through the Authorization
+14: Implements Authorization for BooksController (Testing skipAuthorization)
 
-15: Implements Authorization for BooksController (Testing skipAuthorization)
-
-16: Configures scopeIndex for BooksTablePolicy
+15: Configures scopeIndex for BooksTablePolicy
 
 # Steps to be performed:
 
