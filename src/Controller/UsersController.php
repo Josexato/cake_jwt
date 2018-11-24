@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Firebase\JWT\JWT;
+use Cake\Utility\Security;
 
 /**
  * Users Controller
@@ -149,5 +151,41 @@ class UsersController extends AppController
         $this->Authorization->skipAuthorization();
         $this->Flash->success('You are now logged out.');
         return $this->redirect($this->Authentication->logout());
+    }
+    /**
+     * Token method
+     *
+     * @param null
+     * @return \Cake\Http\Response|null Redirects to login.
+     * @throws
+     */
+    public function token()
+    {
+        $this->Authorization->skipAuthorization();
+        $result = $this->Authentication->getResult();
+        // regardless of POST or GET, redirect if user is logged in
+        if ($result->isValid()) {
+
+            $user = $this->Authentication->getIdentity();
+            $this->set([
+                'success' => true,
+                'data' => [
+                    'token' => JWT::encode(['sub' => $user['id'],'exp' =>  time() + 604800],Security::getSalt())
+                ],
+                '_serialize' => ['success', 'data']
+            ]);
+        }
+        else {
+            $this->set([
+                'success' => false,
+                'data' => [
+                    'token' => "nay"
+                ],
+                '_serialize' => ['success', 'data']
+            ]);
+        }
+
+
+
     }
 }
