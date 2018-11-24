@@ -1,5 +1,6 @@
 # Tests Cakephp Authentication and Authorization plugin
 
+Details of what I've done are in the commit comments and also in the added comments
 Steps performed:
 
 1: Initial installation of cake
@@ -32,6 +33,13 @@ Steps performed:
 
 15: Configures scopeIndex for BooksTablePolicy
 
+16: Use scopes to restrain the application of CSRF middleware to the /api route
+
+17: Handle preflight requests with the OPTIONS method by adding HttpOptionsMiddleware to the middleware queue, this is later needed to implement JWT requests
+https://www.munderwood.ca/index.php/2017/02/28/responding-to-http-options-requests-in-cakephp/
+
+18: Implement JWT by adding a it to getAuthenticationService and adding BodyParserMiddleware in order to be able to use FormAuthenticator when sending a json object
+
 # Steps to be performed:
 
 Test Authorization to resourceless action Using Controller as Resource
@@ -41,7 +49,3 @@ https://github.com/cakephp/authorization/blob/18a821301c91b9fa419046958015276af8
 
 Test Authorization to resourceless action Using StringResolver
 https://github.com/cakephp/authorization/blob/18a821301c91b9fa419046958015276af8fabdfa/tests/test_app/TestApp/Policy/StringResolver.php
-
-Test JWT authorization using preflight request and Angular
-https://www.munderwood.ca/index.php/2017/02/28/responding-to-http-options-requests-in-cakephp/
-
