@@ -14,6 +14,7 @@
  */
 namespace App;
 
+use App\Middleware\HttpOptionsMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -22,6 +23,7 @@ use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 use Cake\Http\Middleware\EncryptedCookieMiddleware;
+use Cake\Http\Middleware\BodyParserMiddleware;
 use Authentication\AuthenticationService;
 use Authentication\AuthenticationServiceProviderInterface;
 use Authentication\Middleware\AuthenticationMiddleware;
@@ -97,22 +99,16 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime')
             ]))
+            // HttpOptionsMiddleware is needed to respond preflight requeriments for the OPTIONS method
+            ->add(new HttpOptionsMiddleware())
 
             // Add routing middleware.
             // Routes collection cache enabled by default, to disable route caching
             // pass null as cacheConfig, example: `new RoutingMiddleware($this)`
             // you might want to disable this cache in case your routing is extremely simple
             ->add(new RoutingMiddleware($this, '_cake_routes_'))
-            ->add(
-                function (ServerRequestInterface $request, ResponseInterface $response, callable $next)
-                {
-                    $params = $request->getAttribute('params');
-                    if ($params['_matchedRoute'] !== '/api/:controller') {
-                        $csrf = new CsrfProtectionMiddleware(['httpOnly' => true]);
-                        return $csrf($request, $response, $next);
-                    }
-                    return $next($request, $response);
-                })
+            // Body Parser is needed to decode the json credentials needed for the Form authenticator
+            ->add(new BodyParserMiddleware())
             ->add($authentication);
         $middlewareQueue->add(new AuthorizationMiddleware($this, [
             'unauthorizedHandler' => [
@@ -149,13 +145,19 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         ];
 
         // Load identifiers
+        $service->loadIdentifier('Authentication.JwtSubject');
         $service->loadIdentifier('Authentication.Password', compact('fields'));
 
         // Load the authenticators, you want session first
+        // Loads JWT authenticator with returnPayload configuration in false so the authorization plugin can call
+        // the Indentifier Class, if this is set to no the identifier only has the basic payload.
+        $service->loadAuthenticator('Authentication.JWT',['returnPayload' => false]);
         $service->loadAuthenticator('Authentication.Session');
         $service->loadAuthenticator('Authentication.Form', [
             'fields' => $fields,
-            'loginUrl' => '/users/login'
+            // we need to inform to the Form authenticator all the login URL's we will be allowed
+            // to use the authenticate method, so we added the /api/users/token.json
+            'loginUrl' => ['/users/login','/api/users/token.json']
         ]);
 
         return $service;
