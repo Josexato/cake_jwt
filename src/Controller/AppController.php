@@ -61,7 +61,7 @@ class AppController extends Controller
         /*
          * Allows the access to all index actions
          */
-        $this->Authentication->allowUnauthenticated(['index']);
+//        $this->Authentication->allowUnauthenticated(['index']);
 
         /*
          * Loads and configures Authorization Component
