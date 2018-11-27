@@ -1,6 +1,7 @@
 # Tests Cakephp Authentication and Authorization plugin
 
-Details of what I've done are in the commit comments and also in the added comments
+Details of what I've done are in the commit comments and also in the added comments.
+
 Steps performed:
 
 1: Initial installation of cake
@@ -40,9 +41,30 @@ https://www.munderwood.ca/index.php/2017/02/28/responding-to-http-options-reques
 
 18: Implement JWT by adding a it to getAuthenticationService and adding BodyParserMiddleware in order to be able to use FormAuthenticator when sending a json object
 
-# Steps to be performed:
+19: Implements Execption management
 
-Test Authorization to resourceless action Using Controller as Resource
+20: Test Authorization to resourceless action Using Controller as Resource (using canIndex and authorizeModel)
+
+# Roadmap:
+
+Test Authorization for action with an specific resource
+ie:
++ Anyone can add Words
++ The authenticated used can add books only if he will be the owner of the books.
++ Only The authenticated user can delete or edit books that belong to him
++ The authenticated user can add weightings only to books that belong to him
++ Only the owner of a book can edit or delete the weightings related to that book
++ Any one can edit or delete a word that has no weightings
++ The authenticated user can edit a word that has weightings only if all the books that have associations to that word belong to that user
++ In case that the user cant edit a word the error message should give a descriptive message (the owner of the books that share the word)
+
+
+Handle UnAuthorized requests for main scope /
+
+Handle Unauthorized requests for api scope /api/
+
+
+# Postponed
 
 Test Authorization to resourceless action Using Requests as Resource
 https://github.com/cakephp/authorization/blob/18a821301c91b9fa419046958015276af8fabdfa/tests/test_app/TestApp/Policy/RequestPolicy.php

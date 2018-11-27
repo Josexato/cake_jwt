@@ -33,6 +33,8 @@ use Authorization\AuthorizationService;
 use Authorization\AuthorizationServiceProviderInterface;
 use Authorization\Middleware\AuthorizationMiddleware;
 use Authorization\Policy\OrmResolver;
+use Authorization\Policy\Exception\MissingMethodException;
+use Authorization\Exception\MissingIdentityException;
 
 /**
  * Application setup class.
@@ -117,7 +119,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
                 'queryParam' => 'redirectUrl',
                 'exceptions' => [
                     MissingIdentityException::class,
-                    OtherException::class,
+                    MissingMethodException::class
                 ],
             ],
             'identityDecorator' => function ($auth, $user) {

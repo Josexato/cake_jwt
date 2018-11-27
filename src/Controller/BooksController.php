@@ -22,7 +22,6 @@ class BooksController extends AppController
     {
 
         $user = $this->request->getAttribute('identity');
-        $this->Authorization->skipAuthorization();
         $query = $user->applyScope('index', $this->Books->find()->contain('Users'));
         $this->set('books', $this->paginate($query));
     }

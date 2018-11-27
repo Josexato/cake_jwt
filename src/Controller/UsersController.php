@@ -31,7 +31,6 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->Authorization->skipAuthorization();
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
@@ -161,7 +160,6 @@ class UsersController extends AppController
      */
     public function token()
     {
-        $this->Authorization->skipAuthorization();
         $result = $this->Authentication->getResult();
         // regardless of POST or GET, redirect if user is logged in
         if ($result->isValid()) {
