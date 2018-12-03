@@ -37,7 +37,7 @@ class WordsController extends AppController
         $word = $this->Words->get($id, [
             'contain' => ['Weightings']
         ]);
-
+        $this->Authorization->authorize($word);
         $this->set('word', $word);
     }
 

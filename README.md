@@ -49,15 +49,18 @@ https://www.munderwood.ca/index.php/2017/02/28/responding-to-http-options-reques
 
 Test Authorization for action with an specific resource
 ie:
-+ Anyone can add Words
-+ The authenticated used can add books only if he will be the owner of the books.
-+ Only The authenticated user can delete or edit books that belong to him
-+ The authenticated user can add weightings only to books that belong to him
-+ Only the owner of a book can edit or delete the weightings related to that book
-+ Any one can edit or delete a word that has no weightings
-+ The authenticated user can edit a word that has weightings only if all the books that have associations to that word belong to that user
-+ In case that the user cant edit a word the error message should give a descriptive message (the owner of the books that share the word)
-
+ - [x] Any authenticated user (AttUser) can add Words
+ - [x] Any AttUser can view/index Words
+ - [ ] Any AttUser can edit/delete Words that don't have weightings or that belong to books owned by the AttUser
+ - [ ] In case that the user cant edit a word the error message should give a descriptive message (the owner of the books that share the word)
+ - [ ] The AttUser can add books only if he will be the owner of the books.
+ - [ ] The AttUser can  list and view only weightings that belong to Books that are owned by AttUser.
+ - [ ] Only The authenticated user can delete or edit books that belong to him
+ - [ ] The authenticated user can add weightings only to books that belong to him
+ - [ ] Only the owner of a book can edit or delete the weightings related to that book
+ - [ ] Any one can edit or delete a word that has no weightings
+ - [ ] The authenticated user can edit a word that has weightings only if all the books that have associations to that word belong to that user
+ 
 
 Handle UnAuthorized requests for main scope /
 
